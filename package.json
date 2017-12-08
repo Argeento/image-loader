@@ -1,0 +1,48 @@
+{
+  "name": "imageLoader",
+  "version": "0.0.0",
+  "description": "Promise based image loader for the browser",
+  "main": "./src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "unit": "mocha",
+    "unit-watch": "mocha --watch",
+    "test": "npm run unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Argeento/image-loader.git"
+  },
+  "keywords": [
+    "img",
+    "image",
+    "loader",
+    "async",
+    "src",
+    "preloader",
+    "promise"
+  ],
+  "author": "Adrian Wieprzkowicz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Argeento/image-loader/issues"
+  },
+  "homepage": "https://github.com/Argeento/image-loader#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.12.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "expect.js": "^0.3.1",
+    "mocha": "^4.0.1",
+    "uglifyjs-webpack-plugin": "^1.1.2",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {}
+}
