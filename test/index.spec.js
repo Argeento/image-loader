@@ -1,1 +1,1 @@
-const expect = require('expect.js')
+import expect from 'expect.js'

@@ -6,8 +6,8 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "unit": "mocha",
-    "unit-watch": "mocha --watch",
+    "unit": "mocha --compilers js:babel-core/register",
+    "unit-watch": "mocha --compilers js:babel-core/register --watch",
     "test": "npm run unit"
   },
   "repository": {
