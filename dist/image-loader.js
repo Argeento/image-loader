@@ -75,9 +75,61 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.default = imageLoader;
-function imageLoader() {
-	console.log('imageLoader is up');
+
+var _fetchImage = __webpack_require__(1);
+
+var _fetchImage2 = _interopRequireDefault(_fetchImage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function imageLoader(url) {
+	return (0, _fetchImage2.default)(url);
 }
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * Try to download an image from URL
+ *
+ * @param {string} url URL to image
+ * @param {class} Image Dependency injection
+ * @return {promise} Resolve or reject a Promise based on image status
+*/
+
+function fetchImage(url) {
+	var Image = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window && window.Image;
+
+	var image = new Image();
+
+	var imagePromise = new Promise(function (resolve, reject) {
+		image.addEventListener('load', function (event) {
+			resolve({
+				time: event.timeStamp,
+				url: url
+			});
+		});
+
+		// eslint-disable-next-line
+		image.addEventListener('error', function (err) {
+			var message = 'ImageLoader: Cannot load image from "' + url + '"';
+			reject(new Error(message));
+		});
+	});
+
+	image.src = url;
+
+	return imagePromise;
+}
+
+exports.default = fetchImage;
 
 /***/ })
 /******/ ])["default"];
