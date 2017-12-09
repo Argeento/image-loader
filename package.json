@@ -1,6 +1,6 @@
 {
   "name": "imageLoader",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Promise based image loader for the browser",
   "main": "./src/index.js",
   "scripts": {
