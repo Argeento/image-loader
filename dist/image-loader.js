@@ -80,10 +80,29 @@ var _fetchImage = __webpack_require__(1);
 
 var _fetchImage2 = _interopRequireDefault(_fetchImage);
 
+var _createConfig = __webpack_require__(2);
+
+var _createConfig2 = _interopRequireDefault(_createConfig);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function imageLoader(url) {
-	return (0, _fetchImage2.default)(url);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function imageLoader() {
+	var config = _createConfig2.default.apply(undefined, arguments);
+
+	if (config.loadFromDOM) {
+		var _config$images;
+
+		var imagesEl = [].concat(_toConsumableArray(document.querySelectorAll('img')));
+		var urls = imagesEl.map(function (img) {
+			return img.src;
+		});
+
+		(_config$images = config.images).push.apply(_config$images, _toConsumableArray(urls));
+	}
+
+	return Promise.all(config.images.map(_fetchImage2.default));
 }
 
 /***/ }),
@@ -100,14 +119,12 @@ Object.defineProperty(exports, "__esModule", {
  * Try to download an image from URL
  *
  * @param {string} url URL to image
- * @param {class} Image Dependency injection
+ * @param {class} ImageDependency Dependency injection
  * @return {promise} Resolve or reject a Promise based on image status
 */
 
-function fetchImage(url) {
-	var Image = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window && window.Image;
-
-	var image = new Image();
+function fetchImage(url, ImageDependency) {
+	var image = typeof ImageDependency === 'function' ? new ImageDependency() : new Image();
 
 	var imagePromise = new Promise(function (resolve, reject) {
 		image.addEventListener('load', function (event) {
@@ -130,6 +147,72 @@ function fetchImage(url) {
 }
 
 exports.default = fetchImage;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+// helpers
+var isFunction = function isFunction(x) {
+	return typeof x === 'function';
+};
+var isString = function isString(x) {
+	return typeof x === 'string' || x instanceof String;
+};
+var isArray = function isArray(x) {
+	return Array.isArray(x);
+};
+
+/**
+ * Create config object from passed arguments
+ *
+ * @param {string, array, function} [arg1] single URL / array of URLs / callback
+ * @param {function} [arg2] callback
+ * @return {object} image-loader config
+*/
+
+function createConfig(arg1, arg2) {
+	var config = {
+		loadFromDOM: false,
+		images: [],
+		callback: function callback() {}
+	};
+
+	if (isFunction(arg1) || !arg1 && !arg2) {
+		config.loadFromDOM = true;
+	}
+
+	if (isFunction(arg1)) {
+		config.callback = arg1;
+	}
+
+	if (isFunction(arg2)) {
+		config.callback = arg2;
+	}
+
+	if (isString(arg1)) {
+		config.images.push(arg1);
+	}
+
+	if (isArray(arg1)) {
+		var _config$images;
+
+		(_config$images = config.images).push.apply(_config$images, _toConsumableArray(arg1));
+	}
+
+	return config;
+}
+
+exports.default = createConfig;
 
 /***/ })
 /******/ ])["default"];

@@ -2,12 +2,14 @@
  * Try to download an image from URL
  *
  * @param {string} url URL to image
- * @param {class} Image Dependency injection
+ * @param {class} ImageDependency Dependency injection
  * @return {promise} Resolve or reject a Promise based on image status
 */
 
-function fetchImage (url, Image = window && window.Image) {
-	const image = new Image()
+function fetchImage (url, ImageDependency) {
+	const image = typeof ImageDependency === 'function'
+		? new ImageDependency()
+		: new Image()
 
 	const imagePromise = new Promise((resolve, reject) => {
 		image.addEventListener('load', event => {
