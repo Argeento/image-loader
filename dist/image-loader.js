@@ -76,33 +76,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = imageLoader;
 
-var _fetchImage = __webpack_require__(1);
+var _Loader = __webpack_require__(6);
 
-var _fetchImage2 = _interopRequireDefault(_fetchImage);
-
-var _createConfig = __webpack_require__(2);
-
-var _createConfig2 = _interopRequireDefault(_createConfig);
+var _Loader2 = _interopRequireDefault(_Loader);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function imageLoader() {
-	var config = _createConfig2.default.apply(undefined, arguments);
-
-	if (config.loadFromDOM) {
-		var _config$images;
-
-		var imagesEl = [].concat(_toConsumableArray(document.querySelectorAll('img')));
-		var urls = imagesEl.map(function (img) {
-			return img.src;
-		});
-
-		(_config$images = config.images).push.apply(_config$images, _toConsumableArray(urls));
+	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+		args[_key] = arguments[_key];
 	}
 
-	return Promise.all(config.images.map(_fetchImage2.default));
+	var loader = new (Function.prototype.bind.apply(_Loader2.default, [null].concat(args)))();
+	return loader.fetchImages();
 }
 
 /***/ }),
@@ -119,25 +105,31 @@ Object.defineProperty(exports, "__esModule", {
  * Try to download an image from URL
  *
  * @param {string} url URL to image
- * @param {class} ImageDependency Dependency injection
  * @return {promise} Resolve or reject a Promise based on image status
 */
 
-function fetchImage(url, ImageDependency) {
-	var image = typeof ImageDependency === 'function' ? new ImageDependency() : new Image();
+var addEventListenerStr = 'addEventListener';
+
+function fetchImage(url) {
+	var image = new window.Image();
 
 	var imagePromise = new Promise(function (resolve, reject) {
-		image.addEventListener('load', function (event) {
+		image[addEventListenerStr]('load', function (event) {
+			// imageInfo
 			resolve({
 				time: event.timeStamp,
+				error: false,
 				url: url
 			});
 		});
 
-		// eslint-disable-next-line
-		image.addEventListener('error', function (err) {
-			var message = 'ImageLoader: Cannot load image from "' + url + '"';
-			reject(new Error(message));
+		image[addEventListenerStr]('error', function (err) {
+			// imageInfo
+			resolve({
+				time: null,
+				error: true,
+				url: url
+			});
 		});
 	});
 
@@ -149,7 +141,30 @@ function fetchImage(url, ImageDependency) {
 exports.default = fetchImage;
 
 /***/ }),
-/* 2 */
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var isFunction = exports.isFunction = function isFunction(x) {
+  return typeof x === 'function';
+};
+var isString = exports.isString = function isString(x) {
+  return typeof x === 'string' || x instanceof String;
+};
+var isArray = exports.isArray = function isArray(x) {
+  return Array.isArray(x);
+};
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -159,60 +174,85 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _fetchImage = __webpack_require__(1);
+
+var _fetchImage2 = _interopRequireDefault(_fetchImage);
+
+var _utils = __webpack_require__(5);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-// helpers
-var isFunction = function isFunction(x) {
-	return typeof x === 'function';
-};
-var isString = function isString(x) {
-	return typeof x === 'string' || x instanceof String;
-};
-var isArray = function isArray(x) {
-	return Array.isArray(x);
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/**
- * Create config object from passed arguments
- *
- * @param {string, array, function} [arg1] single URL / array of URLs / callback
- * @param {function} [arg2] callback
- * @return {object} image-loader config
-*/
+var Loader = function () {
+	function Loader(arg1, arg2) {
+		var _images;
 
-function createConfig(arg1, arg2) {
-	var config = {
-		loadFromDOM: false,
-		images: [],
-		callback: function callback() {}
-	};
+		_classCallCheck(this, Loader);
 
-	if (isFunction(arg1) || !arg1 && !arg2) {
-		config.loadFromDOM = true;
+		this.loadFromDOM = false;
+		this.images = [];
+		this.loadedImages = 0;
+		this.callback = function () {};
+
+		if ((0, _utils.isFunction)(arg1) || !arg1 && !arg2) this.loadFromDOM = true;
+		if ((0, _utils.isFunction)(arg1)) this.callback = arg1;
+		if ((0, _utils.isFunction)(arg2)) this.callback = arg2;
+		if ((0, _utils.isString)(arg1)) this.images.push(arg1);
+		if ((0, _utils.isArray)(arg1)) (_images = this.images).push.apply(_images, _toConsumableArray(arg1));
+
+		if (this.loadFromDOM) {
+			var _images2;
+
+			var imagesEl = [].concat(_toConsumableArray(document.querySelectorAll('img')));
+			var images = imagesEl.map(function (img) {
+				return img.src;
+			});
+
+			(_images2 = this.images).push.apply(_images2, _toConsumableArray(images));
+		}
 	}
 
-	if (isFunction(arg1)) {
-		config.callback = arg1;
-	}
+	_createClass(Loader, [{
+		key: '_onImageLoad',
+		value: function _onImageLoad(imageInfo) {
+			if (!imageInfo.error) this.loadedImages += 1;
 
-	if (isFunction(arg2)) {
-		config.callback = arg2;
-	}
+			this.callback(_extends({
+				all: this.images.length,
+				loaded: this.loadedImages,
+				percent: Math.round(100 * this.loadedImages / this.images.length)
+			}, imageInfo));
 
-	if (isString(arg1)) {
-		config.images.push(arg1);
-	}
+			return imageInfo;
+		}
+	}, {
+		key: 'fetchImages',
+		value: function fetchImages() {
+			var _this = this;
 
-	if (isArray(arg1)) {
-		var _config$images;
+			var attachUserCallback = function attachUserCallback(imagePromise) {
+				return imagePromise.then(function (imageInfo) {
+					return _this._onImageLoad(imageInfo);
+				});
+			};
 
-		(_config$images = config.images).push.apply(_config$images, _toConsumableArray(arg1));
-	}
+			var imagePromises = this.images.map(_fetchImage2.default).map(attachUserCallback);
 
-	return config;
-}
+			return Promise.all(imagePromises);
+		}
+	}]);
 
-exports.default = createConfig;
+	return Loader;
+}();
+
+exports.default = Loader;
 
 /***/ })
 /******/ ])["default"];

@@ -2,27 +2,31 @@
  * Try to download an image from URL
  *
  * @param {string} url URL to image
- * @param {class} ImageDependency Dependency injection
  * @return {promise} Resolve or reject a Promise based on image status
 */
 
-function fetchImage (url, ImageDependency) {
-	const image = typeof ImageDependency === 'function'
-		? new ImageDependency()
-		: new Image()
+const addEventListenerStr = 'addEventListener'
+
+function fetchImage (url) {
+	const image = new window.Image()
 
 	const imagePromise = new Promise((resolve, reject) => {
-		image.addEventListener('load', event => {
+		image[addEventListenerStr]('load', event => {
+			// imageInfo
 			resolve({
 				time: event.timeStamp,
+				error: false,
 				url
 			})
 		})
 
-		// eslint-disable-next-line
-		image.addEventListener('error', err => {
-			const message = `ImageLoader: Cannot load image from "${ url }"`
-			reject(new Error(message))
+		image[addEventListenerStr]('error', err => {
+			// imageInfo
+			resolve({
+				time: null,
+				error: true,
+				url
+			})
 		})
 	})
 

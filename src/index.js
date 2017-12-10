@@ -1,15 +1,7 @@
-import fetchImage from './fetchImage'
-import createConfig from './createConfig'
+
+import Loader from './Loader'
 
 export default function imageLoader (...args) {
-	const config = createConfig(...args)
-
-	if (config.loadFromDOM) {
-		const imagesEl = [...document.querySelectorAll('img')]
-		const urls = imagesEl.map(img => img.src)
-
-		config.images.push(...urls)
-	}
-
-	return Promise.all(config.images.map(fetchImage))
+	const loader = new Loader(...args)
+	return loader.fetchImages()
 }

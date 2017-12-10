@@ -15,7 +15,8 @@ module.exports = {
 		'no-debugger': 2 ,
 		'no-tabs': 0,
 		'indent': ['error', 'tab'],
-		'template-curly-spacing': ['error', 'always']
+		'template-curly-spacing': ['error', 'always'],
+		'handle-callback-err': 0
 	},
 	globals: {}
 }
