@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import { expect } from 'chai'
 
 import { Image200, Image500 } from './mock/Image'
