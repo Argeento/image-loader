@@ -6,9 +6,9 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "unit": "mocha -r babel-core/register -r jsdom-global/register",
-    "unit-watch": "mocha -r babel-core/register -r jsdom-global/register --watch",
-    "test": "npm run unit"
+    "test-watch": "mocha -r babel-core/register -r jsdom-global/register --watch",
+    "test": "nyc mocha -r babel-core/register -r jsdom-global/register",
+	"coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -37,15 +37,19 @@
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
+    "coveralls": "^3.0.0",
     "eslint": "^4.12.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
+    "istanbul": "^0.4.5",
     "jsdom": "11.5.1",
     "jsdom-global": "3.0.2",
     "mocha": "^4.0.1",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^11.3.0",
     "regenerator-runtime": "^0.11.1",
     "uglifyjs-webpack-plugin": "^1.1.2",
     "webpack": "^3.10.0"
