@@ -22,7 +22,7 @@ class Loader {
 		}
 	}
 
-	_onImageLoad (imageInfo) {
+	onImageLoad (imageInfo) {
 		if (!imageInfo.error) this.loadedImages += 1
 
 		this.callback({
@@ -38,7 +38,7 @@ class Loader {
 	fetchImages () {
 		const attachUserCallback = imagePromise => {
 			return imagePromise.then(imageInfo => {
-				return this._onImageLoad(imageInfo)
+				return this.onImageLoad(imageInfo)
 			})
 		}
 

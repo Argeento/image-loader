@@ -76,7 +76,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = imageLoader;
 
-var _Loader = __webpack_require__(6);
+var _Loader = __webpack_require__(1);
 
 var _Loader2 = _interopRequireDefault(_Loader);
 
@@ -101,88 +101,16 @@ function imageLoader() {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-/**
- * Try to download an image from URL
- *
- * @param {string} url URL to image
- * @return {promise} Resolve or reject a Promise based on image status
-*/
-
-var addEventListenerStr = 'addEventListener';
-
-function fetchImage(url) {
-	var image = new window.Image();
-
-	var imagePromise = new Promise(function (resolve, reject) {
-		image[addEventListenerStr]('load', function (event) {
-			// imageInfo
-			resolve({
-				time: event.timeStamp,
-				error: false,
-				url: url
-			});
-		});
-
-		image[addEventListenerStr]('error', function (err) {
-			// imageInfo
-			resolve({
-				time: null,
-				error: true,
-				url: url
-			});
-		});
-	});
-
-	image.src = url;
-
-	return imagePromise;
-}
-
-exports.default = fetchImage;
-
-/***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var isFunction = exports.isFunction = function isFunction(x) {
-  return typeof x === 'function';
-};
-var isString = exports.isString = function isString(x) {
-  return typeof x === 'string' || x instanceof String;
-};
-var isArray = exports.isArray = function isArray(x) {
-  return Array.isArray(x);
-};
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _fetchImage = __webpack_require__(1);
+var _fetchImage = __webpack_require__(2);
 
 var _fetchImage2 = _interopRequireDefault(_fetchImage);
 
-var _utils = __webpack_require__(5);
+var _utils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -220,8 +148,8 @@ var Loader = function () {
 	}
 
 	_createClass(Loader, [{
-		key: '_onImageLoad',
-		value: function _onImageLoad(imageInfo) {
+		key: 'onImageLoad',
+		value: function onImageLoad(imageInfo) {
 			if (!imageInfo.error) this.loadedImages += 1;
 
 			this.callback(_extends({
@@ -239,7 +167,7 @@ var Loader = function () {
 
 			var attachUserCallback = function attachUserCallback(imagePromise) {
 				return imagePromise.then(function (imageInfo) {
-					return _this._onImageLoad(imageInfo);
+					return _this.onImageLoad(imageInfo);
 				});
 			};
 
@@ -253,6 +181,75 @@ var Loader = function () {
 }();
 
 exports.default = Loader;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * Try to download an image from URL
+ *
+ * @param {string} url URL to image
+ * @return {promise} Resolve a Promise based on image status
+*/
+
+var ADD_EVENT_LISTENER = 'addEventListener';
+
+function fetchImage(url) {
+	var image = new window.Image();
+
+	var imagePromise = new Promise(function (resolve, reject) {
+		image[ADD_EVENT_LISTENER]('load', function (event) {
+			// imageInfo
+			resolve({
+				time: Math.round(event.timeStamp),
+				error: false,
+				url: url
+			});
+		});
+
+		image[ADD_EVENT_LISTENER]('error', function (err) {
+			// imageInfo
+			resolve({
+				time: null,
+				error: true,
+				url: url
+			});
+		});
+	});
+
+	image.src = url;
+
+	return imagePromise;
+}
+
+exports.default = fetchImage;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var isFunction = exports.isFunction = function isFunction(x) {
+  return typeof x === 'function';
+};
+var isString = exports.isString = function isString(x) {
+  return typeof x === 'string' || x instanceof String;
+};
+var isArray = exports.isArray = function isArray(x) {
+  return Array.isArray(x);
+};
 
 /***/ })
 /******/ ])["default"];
