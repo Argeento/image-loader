@@ -110,6 +110,10 @@ var _fetchImage = __webpack_require__(2);
 
 var _fetchImage2 = _interopRequireDefault(_fetchImage);
 
+var _parseImage = __webpack_require__(4);
+
+var _parseImage2 = _interopRequireDefault(_parseImage);
+
 var _utils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -145,6 +149,8 @@ var Loader = function () {
 
 			(_images2 = this.images).push.apply(_images2, _toConsumableArray(images));
 		}
+
+		this.images = this.images.map(_parseImage2.default);
 	}
 
 	_createClass(Loader, [{
@@ -192,39 +198,30 @@ exports.default = Loader;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-/**
- * Try to download an image from URL
- *
- * @param {string} url URL to image
- * @return {promise} Resolve a Promise based on image status
-*/
-
 var ADD_EVENT_LISTENER = 'addEventListener';
 
-function fetchImage(url) {
-	var image = new window.Image();
+function fetchImage(image) {
+	var imageEl = new window.Image();
 
 	var imagePromise = new Promise(function (resolve, reject) {
-		image[ADD_EVENT_LISTENER]('load', function (event) {
-			// imageInfo
+		imageEl[ADD_EVENT_LISTENER]('load', function (event) {
 			resolve({
 				time: Math.round(event.timeStamp),
 				error: false,
-				url: url
+				image: image
 			});
 		});
 
-		image[ADD_EVENT_LISTENER]('error', function (err) {
-			// imageInfo
+		imageEl[ADD_EVENT_LISTENER]('error', function (err) {
 			resolve({
 				time: null,
 				error: true,
-				url: url
+				image: image
 			});
 		});
 	});
 
-	image.src = url;
+	imageEl.src = image.url;
 
 	return imagePromise;
 }
@@ -241,6 +238,9 @@ exports.default = fetchImage;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var isFunction = exports.isFunction = function isFunction(x) {
   return typeof x === 'function';
 };
@@ -250,6 +250,42 @@ var isString = exports.isString = function isString(x) {
 var isArray = exports.isArray = function isArray(x) {
   return Array.isArray(x);
 };
+var isObject = exports.isObject = function isObject(x) {
+  return (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && x !== null;
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = parseImage;
+
+var _utils = __webpack_require__(3);
+
+function parseImage(image) {
+	if (!image) {
+		throw new Error('No arguments have passed to parseImage function');
+	}
+
+	if ((0, _utils.isObject)(image) && !image.url) {
+		throw new Error('Image object must have an url property');
+	}
+
+	var url = (0, _utils.isObject)(image) ? image.url : image;
+	var ref = image.ref || {};
+
+	if (!(0, _utils.isString)(url)) {
+		throw new Error('Image url must be a string');
+	}
+
+	return { url: url, ref: ref };
+}
 
 /***/ })
 /******/ ])["default"];

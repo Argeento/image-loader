@@ -1,4 +1,5 @@
 import fetchImage from './fetchImage'
+import parseImage from './parseImage'
 import { isFunction, isString, isArray } from './utils'
 
 class Loader {
@@ -20,6 +21,8 @@ class Loader {
 
 			this.images.push(...images)
 		}
+
+		this.images = this.images.map(parseImage)
 	}
 
 	onImageLoad (imageInfo) {

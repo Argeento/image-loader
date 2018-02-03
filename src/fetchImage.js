@@ -1,36 +1,27 @@
-/**
- * Try to download an image from URL
- *
- * @param {string} url URL to image
- * @return {promise} Resolve a Promise based on image status
-*/
-
 const ADD_EVENT_LISTENER = 'addEventListener'
 
-function fetchImage (url) {
-	const image = new window.Image()
+function fetchImage (image) {
+	const imageEl = new window.Image()
 
 	const imagePromise = new Promise((resolve, reject) => {
-		image[ADD_EVENT_LISTENER]('load', event => {
-			// imageInfo
+		imageEl[ADD_EVENT_LISTENER]('load', event => {
 			resolve({
 				time: Math.round(event.timeStamp),
 				error: false,
-				url
+				image
 			})
 		})
 
-		image[ADD_EVENT_LISTENER]('error', err => {
-			// imageInfo
+		imageEl[ADD_EVENT_LISTENER]('error', err => {
 			resolve({
 				time: null,
 				error: true,
-				url
+				image
 			})
 		})
 	})
 
-	image.src = url
+	imageEl.src = image.url
 
 	return imagePromise
 }

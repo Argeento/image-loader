@@ -18,12 +18,18 @@ describe('Loader', () => {
 
 		it('should set images if the first arg is a string', () => {
 			const url = '/img.jpg'
-			expect(new Loader(url).images).to.be.deep.equal([url])
+			expect(new Loader(url).images).to.be.deep.equal([
+				{ url, ref: {} }
+			])
 		})
 
 		it('should set images if the first arg is an array', () => {
 			const urls = ['/img.jpg', '/img2.jpg', '/img3.jpg']
-			expect(new Loader(urls).images).to.be.deep.equal(urls)
+			expect(new Loader(urls).images).to.be.deep.equal([
+				{ url: urls[0], ref: {} },
+				{ url: urls[1], ref: {} },
+				{ url: urls[2], ref: {} }
+			])
 		})
 
 		it('shuild set callback if only callback is passed', () => {
@@ -129,15 +135,16 @@ describe('Loader', () => {
 
 		it('should resolve to images data object', async () => {
 			window.Image = Image200
-			const imagesAmount = 15
+			const numberOfImages = 15
 			const tmp = []
-			const images = new Array(imagesAmount).fill().map(() => Math.random() + '')
+			const images = new Array(numberOfImages).fill().map(() => Math.random() + '')
 			const loader = new Loader(images, imageInfo => tmp.push(imageInfo))
 			const data = await loader.fetchImages()
 
-			expect(data.length).to.be.equal(imagesAmount)
+			expect(data.length).to.be.equal(numberOfImages)
 			data.forEach((imageData, index) => {
-				expect(imageData).to.have.property('url', images[index])
+				expect(imageData).to.have.property('image')
+				expect(imageData.image).to.have.property('url', images[index])
 				expect(imageData).to.have.property('time', 5)
 				expect(imageData).to.have.property('error', false)
 			})
