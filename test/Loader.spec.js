@@ -70,16 +70,27 @@ describe('Loader', () => {
 			expect(tmp).to.be.equal(true)
 		})
 
-		it('shuld pass to the callback an image info', () => {
+		it('should pass to the callback status and current loaded image', () => {
+			const url = 'url'
+			const time = 10
 			let tmp = {}
-			const imageInfo = { url: 'http', time: 10 }
-			const loader = new Loader('http', imageInfo => { tmp = imageInfo })
+
+			const imageInfo = { url, time }
+			const loader = new Loader('http', (status, loadedImage) => { tmp = { status, loadedImage } })
 			loader.onImageLoad(imageInfo)
-			expect(tmp).to.have.property('url', 'http')
-			expect(tmp).to.have.property('time', 10)
+
+			expect(tmp).to.have.property('status')
+			expect(tmp).to.have.property('loadedImage')
+
+			expect(tmp.status).to.have.property('all', 1)
+			expect(tmp.status).to.have.property('loaded', 1)
+			expect(tmp.status).to.have.property('percent', 100)
+
+			expect(tmp.loadedImage).to.have.property('url', url)
+			expect(tmp.loadedImage).to.have.property('time', time)
 		})
 
-		it('shuld pass to the callback info about loading status', () => {
+		it('should pass to the callback info about loading status', () => {
 			let tmp = {}
 			const loader = new Loader(['1', '2'], imageInfo => { tmp = imageInfo })
 			loader.onImageLoad({})
@@ -143,8 +154,7 @@ describe('Loader', () => {
 
 			expect(data.length).to.be.equal(numberOfImages)
 			data.forEach((imageData, index) => {
-				expect(imageData).to.have.property('image')
-				expect(imageData.image).to.have.property('url', images[index])
+				expect(imageData).to.have.property('url', images[index])
 				expect(imageData).to.have.property('time', 5)
 				expect(imageData).to.have.property('error', false)
 			})

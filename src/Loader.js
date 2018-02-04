@@ -25,17 +25,18 @@ class Loader {
 		this.images = this.images.map(parseImage)
 	}
 
-	onImageLoad (imageInfo) {
-		if (!imageInfo.error) this.loadedImages += 1
+	onImageLoad (loadedImage) {
+		if (!loadedImage.error) this.loadedImages += 1
 
-		this.callback({
+		const loaderStatus = {
 			all: this.images.length,
 			loaded: this.loadedImages,
-			percent: Math.round(100 * this.loadedImages / this.images.length),
-			...imageInfo
-		})
+			percent: Math.round(100 * this.loadedImages / this.images.length)
+		}
 
-		return imageInfo
+		this.callback(loaderStatus, loadedImage)
+
+		return loadedImage
 	}
 
 	fetchImages () {

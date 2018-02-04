@@ -33,11 +33,11 @@ describe('fetchImage function', () => {
 		window.Image = Image200
 		const infoObject200 = await fetchImage({ url })
 		expect(infoObject200.time).to.a('number')
-		expect(infoObject200.image.url).to.be.equal(url)
+		expect(infoObject200.url).to.be.equal(url)
 
 		window.Image = Image500
 		const infoObject500 = await fetchImage({ url })
 		expect(infoObject500.time).to.be.equal(null)
-		expect(infoObject500.image.url).to.be.equal(url)
+		expect(infoObject500.url).to.be.equal(url)
 	})
 })

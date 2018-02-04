@@ -8,7 +8,8 @@ function fetchImage (image) {
 			resolve({
 				time: Math.round(event.timeStamp),
 				error: false,
-				image
+				url: image.url,
+				ref: image.ref
 			})
 		})
 
@@ -16,7 +17,8 @@ function fetchImage (image) {
 			resolve({
 				time: null,
 				error: true,
-				image
+				url: image.url,
+				ref: image.ref
 			})
 		})
 	})

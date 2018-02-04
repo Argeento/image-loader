@@ -102,8 +102,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _fetchImage = __webpack_require__(2);
@@ -155,16 +153,18 @@ var Loader = function () {
 
 	_createClass(Loader, [{
 		key: 'onImageLoad',
-		value: function onImageLoad(imageInfo) {
-			if (!imageInfo.error) this.loadedImages += 1;
+		value: function onImageLoad(loadedImage) {
+			if (!loadedImage.error) this.loadedImages += 1;
 
-			this.callback(_extends({
+			var loaderStatus = {
 				all: this.images.length,
 				loaded: this.loadedImages,
 				percent: Math.round(100 * this.loadedImages / this.images.length)
-			}, imageInfo));
+			};
 
-			return imageInfo;
+			this.callback(loaderStatus, loadedImage);
+
+			return loadedImage;
 		}
 	}, {
 		key: 'fetchImages',
@@ -208,7 +208,8 @@ function fetchImage(image) {
 			resolve({
 				time: Math.round(event.timeStamp),
 				error: false,
-				image: image
+				url: image.url,
+				ref: image.ref
 			});
 		});
 
@@ -216,7 +217,8 @@ function fetchImage(image) {
 			resolve({
 				time: null,
 				error: true,
-				image: image
+				url: image.url,
+				ref: image.ref
 			});
 		});
 	});
