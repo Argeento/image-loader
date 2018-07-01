@@ -61,7 +61,7 @@ var imageLoader =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -72,11 +72,37 @@ var imageLoader =
 
 
 Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var isFunction = exports.isFunction = function isFunction(x) {
+  return typeof x === 'function';
+};
+var isString = exports.isString = function isString(x) {
+  return typeof x === 'string' || x instanceof String;
+};
+var isArray = exports.isArray = function isArray(x) {
+  return Array.isArray(x);
+};
+var isObject = exports.isObject = function isObject(x) {
+  return (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && x !== null;
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.default = imageLoader;
 
-var _Loader = __webpack_require__(1);
+var _Loader = __webpack_require__(2);
 
 var _Loader2 = _interopRequireDefault(_Loader);
 
@@ -92,7 +118,7 @@ function imageLoader() {
 }
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -104,7 +130,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _fetchImage = __webpack_require__(2);
+var _fetchImage = __webpack_require__(3);
 
 var _fetchImage2 = _interopRequireDefault(_fetchImage);
 
@@ -112,7 +138,7 @@ var _parseImage = __webpack_require__(4);
 
 var _parseImage2 = _interopRequireDefault(_parseImage);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -189,7 +215,7 @@ var Loader = function () {
 exports.default = Loader;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -231,32 +257,6 @@ function fetchImage(image) {
 exports.default = fetchImage;
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var isFunction = exports.isFunction = function isFunction(x) {
-  return typeof x === 'function';
-};
-var isString = exports.isString = function isString(x) {
-  return typeof x === 'string' || x instanceof String;
-};
-var isArray = exports.isArray = function isArray(x) {
-  return Array.isArray(x);
-};
-var isObject = exports.isObject = function isObject(x) {
-  return (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && x !== null;
-};
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -268,7 +268,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = parseImage;
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(0);
 
 function parseImage(image) {
 	if (!image) {
